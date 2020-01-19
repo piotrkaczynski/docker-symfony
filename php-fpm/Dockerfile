@@ -32,7 +32,8 @@ RUN apk add --update --no-cache \
     php7-zip \
     php7-xmlwriter \
     make \
-    curl
+    curl \
+    bash
 
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
         && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
@@ -42,6 +43,9 @@ RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-set
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/
 COPY xdebug.ini  /etc/php7/conf.d/
+COPY wait-for-db.sh /usr/bin/wait-for-db.sh
+
+RUN chmod +x /usr/bin/wait-for-db.sh
 
 COPY symfony.pool.conf /etc/php7/php-fpm.d/
 
